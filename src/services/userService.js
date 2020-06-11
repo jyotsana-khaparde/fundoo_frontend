@@ -8,8 +8,7 @@ import axios from 'axios';
  *               save the user details to the database and generate token for confirming useremail
  */
 function userRegister(fname, lname, username, password) {
-    axios.post('/registration',
-        {
+    axios.post('/registration', {
             firstName: fname,
             lastName: lname,
             email: username,
@@ -20,7 +19,7 @@ function userRegister(fname, lname, username, password) {
             const token1 = response.data;
             const token2 = token1.substring(34)
             localStorage.setItem('verifyToken', token2);
-            alert('Please check email to verify your email !!!');  
+            alert('Please check email to verify your email !!!');
         })
         .catch(function (err) {
             console.log(err);
@@ -33,10 +32,12 @@ function userRegister(fname, lname, username, password) {
  * @description This method is to verify user email after registration is done.
  */
 function checkToken(token) {
-    console.log('63--inside check token---',token);
-    axios.post(`/verifyEmail/${token}`,"",{ headers: {
-        'token': token
-    }})
+    console.log('63--inside check token---', token);
+    axios.post(`/verifyEmail/${token}`, "", {
+            headers: {
+                'token': token
+            }
+        })
         .then(function (response) {
             alert('User verified successfully');
             window.location.href = '/login'
@@ -53,8 +54,7 @@ function checkToken(token) {
  * @description This method is posted after the user email verification is done
  */
 function userLogin(username, password) {
-    axios.post('/login',
-        {
+    axios.post('/login', {
             email: username,
             password: password
         })
@@ -75,43 +75,51 @@ function userLogin(username, password) {
  *              to the verified user only
  */
 function forgetPassword(username) {
-    axios.post('/verifyUser',
-    {
-        'email': username,
-    })
-    .then(function (response) {
-        // console.log('53--Inside forgetPassword response is--',response.data);
-        // const token1 = response.data;
-        // const token2 = token1.substring(34)
-        // localStorage.setItem('verifyUserToken', token2);
-        alert('Password change link is send to valid email plz check..')
-    })
-    .catch(function (err) {
-        console.log(err);
-        alert('User Not Found..');
-    });
+    axios.post('/verifyUser', {
+            'email': username,
+        })
+        .then(function (response) {
+            // console.log('53--Inside forgetPassword response is--',response.data);
+            // const token1 = response.data;
+            // const token2 = token1.substring(34)
+            // localStorage.setItem('verifyUserToken', token2);
+            alert('Password change link is send to valid email plz check..')
+        })
+        .catch(function (err) {
+            console.log(err);
+            alert('User Not Found..');
+        });
 }
 
 /**
  * @param {*} password new password to user account
  * @param {*} token is token to verify whether verified user has clicked on reset password link or not
  */
-function resetPassword(password,token) {
-    console.log('83--inside reset paswd password--',password);
-    console.log('84--inside reset paswd token--',token);
-    
-    axios.post(`/resetpassword/${token}`,{'password': password},{
-     headers: {
-        'token': token
-    }})
-    .then(function (response) {
-        alert('Password changed successfully');
+function resetPassword(password, token) {
+    console.log('83--inside reset paswd password--', password);
+    console.log('84--inside reset paswd token--', token);
+
+    axios.post(`/resetpassword/${token}`, {
+            'password': password
+        }, {
+            headers: {
+                'token': token
+            }
+        })
+        .then(function (response) {
+            alert('Password changed successfully');
             window.location.href = '/login'
-    })
-    .catch(function (err) {
-        console.log(err);
-        alert('Password change Unsuccessful.. Please Try Again!!');
-    });
+        })
+        .catch(function (err) {
+            console.log(err);
+            alert('Password change Unsuccessful.. Please Try Again!!');
+        });
 }
 
-export { userRegister, userLogin, forgetPassword, checkToken, resetPassword }
+export {
+    userRegister,
+    userLogin,
+    forgetPassword,
+    checkToken,
+    resetPassword
+}
